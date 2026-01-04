@@ -1,0 +1,1950 @@
+/* ======================
+   HEADER/NAV SİSTEMİ - RESPONSIVE NAVBAR
+   ====================== */
+
+/* Duyuru Alanı */
+.announcement-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1051;
+
+  padding: 10px 0;
+  background-color: #212529; /* bg-dark */
+  overflow: hidden;
+}
+
+/* Sabit görünen alan */
+.announcement-wrapper {
+  position: relative;
+  height: 28px; /* tek satır */
+  overflow: hidden;
+}
+
+/* Duyuru (link) */
+.announcement-item {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  opacity: 0;
+  transition: all 0.5s ease;
+  line-height: 1.6;
+
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+}
+
+/* Aktif duyuru */
+.announcement-item.active {
+  top: 0;
+  opacity: 1;
+}
+
+/* Çıkış animasyonu */
+.announcement-item.exit {
+  top: -100%;
+  opacity: 0;
+}
+
+/* Hover (opsiyonel) */
+.announcement-item:hover {
+  text-decoration: underline;
+}
+
+
+/* HEADER TEMEL */
+#mainHeader {
+  top: 40px; /* Duyuru barı yüksekliği */
+  transition: all 0.4s ease;
+  background-color: transparent;
+  z-index: 1000;
+}
+
+/* Büyük ekran (≥992px) */
+@media (min-width: 992px) {
+  /* Açılışta transparan + beyaz içerik */
+  #mainHeader .logo-white { display: inline-block !important; }
+  #mainHeader .logo-dark  { display: none !important; }
+
+  #mainHeader .nav-link,
+  #mainHeader .header-icon i,
+  #mainHeader .search-button i,
+  #mainHeader .search-button span {
+    color: #ffffff !important;
+  }
+
+  /* Scroll sonrası beyaz arka plan + siyah içerik */
+  #mainHeader.scrolled {
+    background-color: #ffffff !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+
+  #mainHeader.scrolled .logo-white { display: none !important; }
+  #mainHeader.scrolled .logo-dark  { display: inline-block !important; }
+
+  #mainHeader.scrolled .nav-link,
+  #mainHeader.scrolled .header-icon i,
+  #mainHeader.scrolled .search-button i,
+  #mainHeader.scrolled .search-button span {
+    color: #000000 !important;
+  }
+}
+
+/* Küçük ekran (<992px) - Her zaman beyaz + siyah */
+@media (max-width: 991.98px) {
+  #mainHeader {
+    background-color: #ffffff !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  }
+
+  #mainHeader .logo-white { display: none !important; }
+  #mainHeader .logo-dark  { display: inline-block !important; }
+
+  #mainHeader .nav-link,
+  #mainHeader .header-icon i,
+  #mainHeader .search-button i,
+  #mainHeader .search-button span {
+    color: #000000 !important;
+  }
+
+  /* Hamburger siyah olsun */
+  #mainHeader .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(0,0,0,1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+  }
+}
+
+/* Arama butonu hover efekti */
+.search-button {
+  transition: opacity 0.2s ease;
+}
+.search-button:hover {
+  opacity: 0.85;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Kategori sayfası için header stili */
+.page-category #mainHeader {
+  background-color: #fff !important;
+}
+
+.page-category #mainHeader .navbar-brand,
+.page-category #mainHeader .nav-link {
+  color: #000 !important;
+}
+
+.page-category #mainHeader .logo-white {
+  display: none !important;
+}
+
+.page-category #mainHeader .logo-dark {
+  display: inline-block !important;
+}
+
+.page-category #mainHeader .header-icon i {
+  color: #000 !important;
+}
+
+/* Kategori sayfasında scroll efekti iptal edilir */
+.page-category #mainHeader.scrolled {
+  background-color: #fff !important;
+}
+
+.page-category #mainHeader.scrolled .navbar-brand,
+.page-category #mainHeader.scrolled .nav-link {
+  color: #000 !important;
+}
+
+.page-category #mainHeader.scrolled .logo-white {
+  display: none !important;
+}
+
+.page-category #mainHeader.scrolled .logo-dark {
+  display: inline-block !important;
+}
+
+.page-category #mainHeader.scrolled .header-icon i {
+  color: #000 !important;
+}
+
+
+
+
+
+/* Header ikonlar genel stil */
+.header-icon {
+  font-size: 1.1rem;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.header-icon:hover i {
+  transform: scale(1.1);
+}
+
+/* İkonların altında çizgi olmasını engelle */
+.header-icon::after {
+  display: none !important;
+}
+
+/* Nav Link Alt Çizgi Efekti - Sadece desktop'ta aktif */
+@media (min-width: 992px) {
+  .nav-link {
+    position: relative;
+    transition: all 0.3s ease;
+    padding: 0.5rem 0;
+  }
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: currentColor;
+    transition: width 0.3s ease;
+  }
+  .nav-link:hover::after {
+    width: 100%;
+  }
+}
+
+/* İkonlar için hover efekti */
+a i {
+  transition: transform 0.2s ease;
+}
+a:hover i {
+  transform: scale(1.1);
+}
+
+/* Offcanvas Menü */
+.offcanvas {
+  width: 90% !important;
+  max-width: 450px;
+  z-index: 1200;
+}
+
+.offcanvas-body a:hover {
+  color: #000 !important;
+  transform: translateX(5px);
+  transition: all 0.3s ease;
+}
+
+/* Mobil çok seviyeli menü */
+.mobile-menu-logo {
+  font-size: 1.5rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+
+.mobile-menu-wrapper {
+  position: relative;
+  height: calc(100vh - 70px);
+}
+
+.mobile-menu-panel {
+  position: absolute;
+  inset: 0;
+  padding: 1rem 1.5rem;
+  background-color: #ffffff;
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  overflow-y: auto;
+}
+
+.mobile-menu-panel.active {
+  transform: translateX(0);
+}
+
+.mobile-menu-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mobile-menu-list-secondary {
+  margin-top: 2rem;
+}
+
+.mobile-menu-item {
+  border-bottom: 1px solid #000;
+}
+
+.mobile-menu-item:last-child {
+  border-bottom: none;
+}
+
+.mobile-menu-link,
+.mobile-menu-link-simple {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.9rem 0;
+  font-size: 0.9rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: none;
+  border: none;
+  text-decoration: none;
+  color: #000000;
+}
+
+.mobile-menu-link {
+  font-weight: 600;
+}
+
+.mobile-menu-link-simple {
+  font-weight: 500;
+}
+
+.mobile-menu-link:focus,
+.mobile-menu-link-simple:focus {
+  outline: none;
+}
+
+.mobile-menu-arrow {
+  font-size: 1.4rem;
+}
+
+.mobile-menu-top {
+  margin-bottom: 0.5rem;
+}
+
+.mobile-menu-back {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.85rem 0;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  background: none;
+  border: none;
+}
+
+.mobile-menu-back i {
+  font-size: 1.4rem;
+}
+
+@media (max-width: 575.98px) {
+  .mobile-menu-panel {
+    padding-inline: 1.1rem;
+  }
+
+  .mobile-menu-logo {
+    font-size: 1.3rem;
+    letter-spacing: 0.25em;
+  }
+}
+
+/* Mobil menü açıkken duyuru barını gizle */
+@media (max-width: 991.98px) {
+  body.mobile-menu-open .announcement-bar {
+    display: none;
+  }
+}
+
+/* Offcanvas Tab Stilleri */
+#accountTabs .nav-link {
+  border: none;
+  background: transparent;
+}
+
+#accountTabs .nav-link.active {
+  background: transparent;
+  border-bottom: 2px solid #000;
+}
+
+#accountTabs .nav-link:hover {
+  background: #f8f9fa;
+}
+
+/* Arama Offcanvas */
+#searchOffcanvas .form-control {
+  font-size: 1.1rem;
+  padding: 0.75rem 0.5rem;
+}
+
+#searchOffcanvas .form-control:focus {
+  border-color: #000;
+  box-shadow: none;
+}
+
+.search-result-item {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.search-result-item:hover {
+  background: #f8f9fa;
+  padding-left: 10px;
+}
+
+/* Ensure search results stay within offcanvas */
+#searchOffcanvas #searchResults {
+  position: relative;
+  z-index: 1;
+}
+
+/* Sepet item stilleri */
+.cart-item {
+  position: relative;
+  z-index: 1;
+  display: block;
+}
+
+.cart-item img {
+  border-radius: 4px;
+}
+
+.cart-item .btn-group button {
+  min-width: 35px;
+}
+
+/* Responsive Text */
+@media (max-width: 1199.98px) {
+  .nav-link {
+    font-size: 0.9rem;
+  }
+}
+
+/* ======================
+   CAROUSEL AYARLARI
+   ====================== */
+
+/* Carousel için padding */
+body {
+  padding-top: 40px; /* Duyuru alanı kadar */
+  overflow-x: hidden;
+}
+
+/* Clear floats to prevent content from spilling into footer */
+.main-content {
+  overflow: hidden;
+}
+
+/* Ensure footer stays at the bottom */
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
+}
+
+/* Ensure main content doesn't overlap footer */
+main, .main-content {
+  margin-bottom: 0 !important;
+  padding-bottom: 2rem; /* Space for footer */
+}
+
+
+
+
+/* Genel (duyuru + header için güvenli başlangıç) */
+body {
+  padding-top: 40px;          /* sadece duyuru barı */
+}
+
+/* Küçük ekranlar - arama barı kalktığı için */
+@media (max-width: 991.98px) {
+  body {
+    padding-top: 80px;        /* duyuru(~40px) + header(~40-50px) */
+  }
+}
+
+@media (max-width: 575px) {     /* çok küçük telefonlar */
+  body {
+    padding-top: 75px;
+  }
+}
+
+
+
+.carousel-item img {
+  height: 85vh;
+  object-fit: cover;
+}
+
+@media (max-width: 991.98px) {
+  .carousel-item img {
+    height: 60vh;
+  }
+}
+
+/* Carousel Caption Pozisyonu */
+.carousel-caption {
+  bottom: 40px;
+}
+
+@media (max-width: 767.98px) {
+  .carousel-caption {
+    bottom: 30px;
+  }
+}
+
+/* Slider Buton Stilleri */
+.btn-slider {
+  background: #ffffff;
+  color: #000000;
+  border: 2px solid #ffffff;
+  padding: 10px 35px;
+  font-size: 0.9rem;
+  border-radius: 0;
+  transition: all 0.3s ease;
+}
+
+.btn-slider:hover {
+  background: transparent;
+  color: #ffffff;
+  border-color: #ffffff;
+  border-radius: 0;
+}
+
+/* Slider Indicators */
+.carousel-indicators {
+  margin-bottom: 2rem;
+}
+
+.carousel-indicators [data-bs-target] {
+  width: 7.5px;
+  height: 7.5px;
+  border-radius: 50%;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.4);
+  opacity: 1;
+  transition: all 0.3s ease;
+}
+
+.carousel-indicators .active {
+  background-color: #ffffff;
+  transform: scale(1.3);
+}
+
+/* ======================
+   DÖRTLÜ BLOK & İKİLİ BLOK STİLLERİ
+   ====================== */
+
+.product-block-item {
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.product-block-item img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: transform 0.4s ease;
+}
+
+.img-responsive-square {
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+.product-block-item:hover img {
+  transform: scale(1.05);
+}
+
+.product-block-overlay {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  text-align: center;
+}
+
+@media (max-width: 767.98px) {
+  .product-block-overlay {
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+.product-block-link {
+  display: inline-block;
+  background: #ffffff;
+  color: #000000;
+  padding: 10px 30px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: 2px solid #ffffff;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+}
+
+.product-block-link:hover {
+  background: transparent;
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+@media (max-width: 767.98px) {
+  .product-block-link {
+    padding: 8px 20px;
+    font-size: 0.75rem;
+  }
+}
+
+.ikili-blok .row {
+  margin: 0;
+}
+
+.ikili-blok .col-6 {
+  padding: 0;
+}
+
+.ikili-blok h5 {
+  font-size: 1.25rem;
+  letter-spacing: 2px;
+}
+
+@media (max-width: 767.98px) {
+  .ikili-blok h5 {
+    font-size: 1rem;
+  }
+}
+
+/* ======================
+   PRESTİJ BLOK STİLLERİ
+   ====================== */
+
+.prestij-blok {
+  background: #f8f9fa;
+}
+
+.prestij-blok i {
+  color: #000000;
+}
+
+.prestij-blok p {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+@media (max-width: 991.98px) {
+  .prestij-blok p {
+    font-size: 0.75rem;
+  }
+  
+  .prestij-blok i {
+    font-size: 1.5rem !important;
+  }
+}
+
+/* ======================
+   FOOTER STİLLERİ
+   ====================== */
+
+.site-footer {
+  background: #ffffff;
+  color: #000000;
+  position: relative;
+  z-index: 10;
+  clear: both;
+}
+
+.footer-top-bar {
+  border-bottom: 1px solid #dee2e6;
+}
+
+.footer-top-bar i {
+  color: #000000;
+}
+
+.footer-top-bar span {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.footer-main {
+  background: #ffffff;
+}
+
+.footer-heading {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 1rem;
+}
+
+.footer-links li {
+  margin-bottom: 0.5rem;
+}
+
+.footer-links a {
+  color: #000000;
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.footer-links a:hover {
+  color: #666;
+  padding-left: 5px;
+}
+
+.footer-main .form-control {
+  border-radius: 0;
+  border: 1px solid #000;
+  font-size: 0.85rem;
+}
+
+.footer-main .btn-dark {
+  border-radius: 0;
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.footer-main .form-check-label {
+  font-size: 0.7rem;
+  line-height: 1.4;
+}
+
+.footer-bottom {
+  background: #ffffff;
+  border-top: 1px solid #dee2e6;
+}
+
+.payment-icons img {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+@media (max-width: 991.98px) {
+  .footer-heading {
+    font-size: 0.85rem;
+    margin-top: 1.5rem;
+  }
+  
+  .footer-links a {
+    font-size: 0.8rem;
+  }
+  
+  .footer-main .col-12 {
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 1rem;
+  }
+  
+  .footer-main .col-12:last-child {
+    border-bottom: none;
+  }
+}
+
+/* ======================
+   KATEGORİ NAVİGASYONU
+   ====================== */
+
+.category-item {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  color: #000;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.category-item:hover {
+  background-color: #f8f9fa;
+  border-color: #000;
+}
+
+.category-item.active {
+  background-color: #000;
+  color: #fff;
+  border-color: #000;
+}
+
+/* Mobilde yatay kaydırma */
+@media (max-width: 991.98px) {
+  .category-nav {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .category-nav .d-flex {
+    width: max-content;
+  }
+}
+
+/* Büyük ekranlarda yatay kaydırma gizle */
+@media (min-width: 992px) {
+  .category-nav {
+    overflow-x: visible;
+  }
+}
+
+/* Ürün kartı stilleri */
+.product-card {
+  border: none;
+  transition: transform 0.3s ease;
+  position: relative;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+}
+
+.product-image {
+  position: relative;
+  overflow: hidden;
+}
+
+.product-image img {
+  width: 100%;
+  height: auto;
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-image img {
+  transform: scale(1.05);
+}
+
+.product-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: transparent;
+  color: #000;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  border-radius: 0;
+  z-index: 2;
+}
+
+.product-hover-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: transparent;
+  padding: 10px;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+  z-index: 2;
+}
+
+.product-card:hover .product-hover-overlay {
+  transform: translateY(0);
+}
+
+.color-swatch {
+  width: 20px;
+  height: 20px;
+  border-radius: 0;
+  display: block;
+  margin-bottom: 3px;
+  border: 1px solid #ddd;
+}
+
+.heart-icon {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: transparent;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+
+.heart-icon:hover {
+  color: #dc3545;
+  transform: scale(1.1);
+}
+
+.product-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.product-price {
+  font-size: 0.9rem;
+}
+
+.price-discounted {
+  color: #6c757d;
+  text-decoration: line-through;
+  margin-right: 5px;
+}
+
+.price-current {
+  font-weight: bold;
+}
+
+.discount-percent {
+  color: #dc3545;
+  font-size: 0.8rem;
+  font-weight: bold;
+  margin-left: 5px;
+}
+
+/* Filtre offcanvas */
+#filterOffcanvas .offcanvas-body {
+  padding: 1rem 0;
+}
+
+.filter-section {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+}
+
+.filter-section h5 {
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.filter-options .form-check {
+  margin-bottom: 0.5rem;
+}
+
+.filter-options .form-check-label {
+  font-size: 0.9rem;
+}
+
+/* Kategori ürün kartı yeni düzen */
+.product-card {
+  border: none;
+  transition: transform 0.3s ease;
+  position: relative;
+  height: 100%;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+}
+
+.product-image {
+  position: relative;
+  overflow: hidden;
+}
+
+.product-image img {
+  width: 100%;
+  height: auto;
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-image img {
+  transform: scale(1.05);
+}
+
+.product-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: transparent;
+  color: #000;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  border-radius: 0;
+  z-index: 2;
+}
+
+.product-hover-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: transparent;
+  padding: 10px;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+  z-index: 2;
+}
+
+.product-card:hover .product-hover-overlay {
+  transform: translateY(0);
+}
+
+.color-swatch {
+  width: 20px;
+  height: 20px;
+  border-radius: 0;
+  display: block;
+  margin-bottom: 3px;
+  border: 1px solid #ddd;
+}
+
+.heart-icon {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: transparent;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+  transition: all 0.3s ease;
+  color: #dc3545;
+  text-decoration: none;
+}
+
+.heart-icon:hover {
+  color: #dc3545;
+  transform: scale(1.1);
+}
+
+.product-info {
+  padding: 0.5rem !important;
+  text-align: left;
+}
+
+.product-name {
+  font-size: 0.85rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+}
+
+/* Büyük ekranlarda ürün adı ve fiyat aynı satırda */
+@media (min-width: 992px) {
+  .product-info {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .product-name {
+    align-self: flex-start;
+  }
+  
+  .product-price {
+    align-self: flex-start;
+    margin-top: 0.25rem;
+  }
+}
+
+/* Küçük ekranlarda ürün adı ilk satır, fiyat ikinci satır */
+@media (max-width: 991.98px) {
+  .product-info {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .product-name {
+    margin-bottom: 0.25rem;
+  }
+  
+  .product-price {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+
+.product-price {
+  font-size: 0.85rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-top: 0.25rem;
+}
+
+@media (max-width: 991.98px) {
+  .product-price {
+    justify-content: flex-start;
+  }
+}
+
+.price-discounted {
+  color: #6c757d;
+  text-decoration: line-through;
+  margin-right: 5px;
+  font-weight: 400;
+}
+
+.price-current {
+  font-weight: 600;
+}
+
+.discount-percent {
+  color: #dc3545;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-left: 5px;
+}
+
+/* Kategori sayfası container-fluid */
+.page-category .container {
+  width: 100%;
+  padding-right: var(--bs-gutter-x, 0.75rem);
+  padding-left: var(--bs-gutter-x, 0.75rem);
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.page-category .container-fluid {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* Ürünler arası yatay boşluk kaldırma */
+.page-category .row {
+  --bs-gutter-x: 0;
+}
+
+.page-category .col-6,
+.page-category .col-md-3 {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* Ürün kartı içeriği için padding */
+.page-category .product-card {
+  padding: 0;
+}
+
+
+.subcategory-link,
+.sort-filter a {
+  color: #000 !important; /* Normal durum */
+  text-decoration: none;  /* Alt çizgi olmasın */
+}
+
+.subcategory-link:hover,
+.sort-filter a:hover,
+.subcategory-link:visited,
+.sort-filter a:visited {
+  color: #000 !important; /* Hover ve visited’da da siyah kalsın */
+  text-decoration: none;  /* Hover’da alt çizgi çıkmasın */
+}
+
+/* Aktif kategori için (altı çizili ve kalın) */
+.subcategory-link.active {
+  font-weight: bold;
+  text-decoration: underline;
+  color: #000;
+}
+
+/* Breadcrumb metinlerini büyük harf yap */
+.breadcrumb .breadcrumb-item a,
+.breadcrumb .breadcrumb-item span {
+  text-transform: uppercase;
+}
+
+.page-category {
+    padding-top: 120px; /* Announcement + Header yüksekliği kadar */
+}
+
+/* Daha kesin olmak istersen medya sorguları ile responsive yapabilirsin */
+@media (max-width: 767px) {
+    .page-category {
+        padding-top: 100px; /* Mobilde header daha kısa olabilir */
+    }
+}
+
+/* Scroll bar'ı tamamen gizle, ama kaydırma hâlâ çalışsın */
+.subcategory-scroll {
+  -webkit-overflow-scrolling: touch; /* iOS'ta akıcı kaydırma */
+  scrollbar-width: none;             /* Firefox */
+  -ms-overflow-style: none;          /* IE ve Edge */
+}
+
+.subcategory-scroll::-webkit-scrollbar {
+  display: none;                     /* Chrome, Safari, Opera */
+}
+
+/* İsteğe bağlı: Sağ tarafa hafif bir fade efekti (daha fazla içerik olduğu hissi versin) */
+.subcategory-scroll::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40px;
+  height: 100%;
+  background: linear-gradient(to left, white, transparent);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Fade efektini container'a göre konumlandır */
+.subcategory-scroll {
+  position: relative;
+}
+
+
+
+/* ======================
+   ÜRÜN DETAY SAYFASI - HEADER & LOGO ÖZEL KURALLARI
+   ====================== */
+
+/* Ürün detay sayfasında header her zaman beyaz arka planlı olsun */
+.page-product #mainHeader {
+  background-color: #fff !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+
+/* Sol kolon (logo kısmı) da beyaz arka plan alsın */
+.page-product #mainHeader .col-6:first-child {
+  background-color: #fff !important;
+}
+
+/* Sağ kolon zaten beyaz, ama emin olalım */
+.page-product #mainHeader .col-6:last-child {
+  background-color: #fff !important;
+}
+
+/* Tüm metin ve ikonlar siyah olsun (scroll/hover fark etmez) */
+.page-product #mainHeader .nav-link,
+.page-product #mainHeader .navbar-brand,
+.page-product #mainHeader .header-icon i {
+  color: #000 !important;
+}
+
+/* Beyaz logo kesinlikle görünmesin (ekstra güvenlik) */
+.page-product #mainHeader .logo-white {
+  display: none !important;
+}
+
+/* Siyah logo her zaman görünsün */
+.page-product #mainHeader .logo-dark {
+  display: inline-block !important;
+}
+
+/* Scroll veya hover'da ekstra değişiklik olmasın (zaten beyaz) */
+.page-product #mainHeader.scrolled,
+.page-product #mainHeader:hover {
+  background-color: #fff !important;
+}
+
+.page-product #mainHeader.scrolled .col-6:first-child,
+.page-product #mainHeader:hover .col-6:first-child {
+  background-color: #fff !important;
+}
+
+
+/* ======================
+   ÜRÜN DETAY SAYFASI - SEVEBİLECEĞİNİZ ÜRÜNLER SLIDER OKLARI
+   ====================== */
+
+/* Carousel oklarını daha içe çek ve rengi siyah yap (sadece ürün sayfası) */
+.page-product #relatedCarousel .carousel-control-prev {
+  left: 3%; /* col-2 ≈ %8.33 (12 kolon sisteminde 2/12) */
+  width: auto;
+  opacity: 1;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.page-product #relatedCarousel .carousel-control-next {
+  right: 3%; /* col-10 ≈ %91.67'den sağa, yani 100% - 8.33% */
+  width: auto;
+  opacity: 1;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Ok ikonlarının rengini siyah yap */
+.page-product #relatedCarousel .carousel-control-prev-icon,
+.page-product #relatedCarousel .carousel-control-next-icon {
+  background-image: none; /* Varsayılan gri ikonları kaldır */
+  position: relative;
+}
+
+/* Siyah ok ikonları (Font Awesome ile daha net olsun) */
+.page-product #relatedCarousel .carousel-control-prev-icon::before {
+  content: "\f053"; /* Font Awesome left arrow */
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  font-size: 30px;
+  color: #000;
+}
+
+.page-product #relatedCarousel .carousel-control-next-icon::before {
+  content: "\f054"; /* Font Awesome right arrow */
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  font-size: 30px;
+  color: #000;
+}
+
+/* Hover'da da siyah kalsın ve hafif büyüsin */
+.page-product #relatedCarousel .carousel-control-prev:hover .carousel-control-prev-icon::before,
+.page-product #relatedCarousel .carousel-control-next:hover .carousel-control-next-icon::before {
+  color: #000;
+  transform: scale(1.2);
+}
+
+
+
+
+
+
+/* ======================
+   ÜRÜN DETAY - FOTOĞRAF GALERİSİ (SCROLL + THUMBNAIL)
+   ====================== */
+
+.page-product .product-gallery {
+  height: 100vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  scroll-snap-type: y mandatory;
+  scrollbar-width: none; /* Firefox */
+}
+
+.page-product .product-gallery::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
+
+.page-product .gallery-image {
+  width: 100%;
+  height: auto;
+  min-height: 100vh;
+  object-fit: cover;
+  scroll-snap-align: start;
+  transition: transform 0.5s ease;
+}
+
+/* Hover'da hafif zoom (taşma yok çünkü parent overflow hidden değil ama col-6 içinde kalır) */
+.page-product .product-gallery:hover .gallery-image {
+  transform: scale(1.08);
+}
+
+/* Hover'da hafif zoom (taşma yok çünkü parent overflow hidden değil ama col-6 içinde kalır) */
+.page-product .product-gallery:hover .gallery-image {
+  transform: scale(1.08);
+}
+
+
+/* Thumbnail'lar */
+.page-product .thumbnails .thumbnail {
+  width: 80px;
+  height: 100px;
+  object-fit: cover;
+  border: 1px solid #999999; /* 1px, orta gri ton (#999999) */
+  border-radius: 6px;
+  opacity: 0.7;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  background: #fff; /* Arka plan beyaz, seçili olmasa bile net görünsün */
+}
+
+.page-product .thumbnails .thumbnail:hover {
+  opacity: 1;
+  transform: scale(1.05);
+  border-color: #666666; /* Hover'da biraz daha koyu gri */
+}
+
+.page-product .thumbnails .thumbnail.active {
+  opacity: 1;
+  border-color: #000000; /* Sadece aktif olanda siyah border */
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+
+
+
+
+/* ======================
+   ÜRÜN DETAY SAYFASI - YAZI STİLLERİ VE RENKLER
+   ====================== */
+
+/* Breadcrumb daha büyük ve normal kalınlıkta */
+.page-product .breadcrumb {
+  font-size: 1.125rem;        /* Yaklaşık 18px - istediğin boyuta göre 1rem veya 1.25rem yapabilirsin */
+  font-weight: normal !important;
+}
+
+/* Breadcrumb içindeki link ve aktif metin siyah */
+.page-product .breadcrumb-item a,
+.page-product .breadcrumb-item.active {
+  color: #000 !important;
+  font-weight: normal !important;
+}
+
+/* Breadcrumb ayırıcı (-->) da siyah olsun */
+.page-product .breadcrumb-item + .breadcrumb-item::before {
+  color: #000;
+}
+
+/* Sağ taraftaki başlıklar (Renk, Beden, offcanvas linkleri) */
+.page-product .product-details h3,           /* Renk, Beden gibi */
+.page-product .product-details a {           /* ÜRÜN AÇIKLAMASI, İÇERİK vs. linkleri */
+  font-weight: normal !important;            /* Bold olmasın */
+  color: #000 !important;                    /* Siyah */
+  text-decoration: none !important;          /* Varsayılan alt çizgi kalksın */
+  text-transform: uppercase;                 /* Büyük harf kalsın */
+  font-size: 0.95rem;                        /* Biraz daha küçük, zarif olsun */
+  letter-spacing: 0.05em;
+  transition: opacity 0.3s ease;
+}
+
+/* Hover'da sadece hafif soluklaşsın ama renk siyah kalsın */
+.page-product .product-details a:hover {
+  color: #000 !important;
+  opacity: 0.7;
+}
+
+/* Beden seçeneği (select veya butonlar) da normal kalınlıkta */
+.page-product .form-select,
+.page-product .size-option {   /* Eğer beden butonları varsa */
+  font-weight: normal !important;
+}
+
+
+
+
+
+/* Ürün detay - üst boşluk ve breadcrumb stili */
+.product-main {
+  padding-top: 140px; /* Header + duyuru için güvenli */
+}
+
+@media (max-width: 991.98px) {
+  .product-main {
+    padding-top: 120px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .product-main {
+    padding-top: 100px;
+  }
+}
+
+/* Breadcrumb sade */
+.breadcrumb-nav .breadcrumb {
+  font-size: 0.875rem;
+  letter-spacing: 0.08em;
+  font-weight: normal;
+}
+
+.breadcrumb-nav .breadcrumb-item + .breadcrumb-item::before {
+  content: "-->";
+  padding: 0 1rem;
+}
+
+.breadcrumb-nav .breadcrumb-item a,
+.breadcrumb-nav .breadcrumb-item.active {
+  color: #000;
+  text-decoration: none;
+}
+
+.breadcrumb-nav .breadcrumb-item a:hover {
+  opacity: 0.7;
+}
+
+/* Sevebileceğiniz Ürünler - Kategori stili gibi */
+.related-products .product-name {
+  font-size: 0.85rem;
+  font-weight: normal;
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+  line-height: 1.3;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.related-products .product-price {
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.related-products .price-current {
+  font-weight: 600;
+}
+
+.related-products .price-discounted {
+  font-weight: normal;
+}
+
+.related-products .discount-percent {
+  font-weight: 600;
+  font-size: 0.75rem;
+}
+
+/* Favori kalp ikon hover efekti */
+.hover-text-danger {
+  transition: color 0.3s ease;
+}
+
+.hover-text-danger:hover {
+  color: #dc3545 !important; /* Kırmızıya döner */
+  transform: scale(1.15);
+}
+
+/* Dolu kalp efekti (gerçek projede JS ile favoriye eklenince değişir) */
+/* .fa-solid.fa-heart { color: #dc3545; } */
+
+
+/* ======================
+   ÜRÜN DETAY SAYFASI ÖZEL STİLLER
+   ====================== */
+
+/* Ürün galerisi için özel stiller */
+.product-gallery {
+  height: 500px;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+}
+
+.gallery-image {
+  scroll-snap-align: start;
+  min-height: 500px;
+}
+
+.thumbnails {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.thumbnail {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.thumbnail.active {
+  border-color: #000;
+}
+
+.product-details {
+  background-color: #fff;
+  padding: 2rem !important;
+}
+
+.related-products .carousel-item {
+  display: flex;
+}
+
+.related-products .carousel-item .row {
+  width: 100%;
+}
+
+/* Ürün detay - üst boşluk */
+.product-main {
+  padding-top: 50px;
+}
+
+/* Renk seçimi için stil */
+.color-swatch {
+  width: 40px;
+  height: 40px;
+  border-radius: 0;
+  display: block;
+  margin-bottom: 3px;
+  border: 1px solid #ddd;
+}
+
+/* Ürün açıklaması offcanvas için stil */
+.offcanvas.w-50 {
+  width: 400px !important;
+}
+
+@media (max-width: 576px) {
+  .offcanvas.w-50 {
+    width: 100% !important;
+  }
+}
+
+/* Ürün başlığı stil */
+.fs-4.text-uppercase.fw-bold.mb-0 {
+  font-size: 1.5rem !important;
+}
+
+/* Ürün fiyatı stil */
+.fs-3.fw-bold {
+  font-size: 1.75rem !important;
+}
+
+/* Sepet butonu stil */
+.btn-dark.w-50.py-3.text-uppercase.fw-medium {
+  width: 100% !important;
+}
+
+/* Offcanvas linkleri stil */
+.border-top.pt-4 a {
+  border-bottom: 1px solid #eee;
+  transition: all 0.3s ease;
+}
+
+.border-top.pt-4 a:hover {
+  background-color: #f8f9fa;
+  padding-left: 10px;
+}
+
+/* Ürün açıklaması offcanvas içeriği */
+.offcanvas-body p {
+  line-height: 1.6;
+}
+
+/* İlgili ürünler carousel okları */
+.carousel-control-prev-icon::before,
+.carousel-control-next-icon::before {
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+}
+
+.carousel-control-prev-icon::before {
+  content: "\f053";
+}
+
+.carousel-control-next-icon::before {
+  content: "\f054";
+}
+
+/* Ürün kartı stil ayarlamaları */
+.related-products .product-card {
+  transition: transform 0.3s ease;
+}
+
+.related-products .product-card:hover {
+  transform: translateY(-3px);
+}
+
+/* Ürün isimleri büyük harf */
+.related-products .product-name.text-uppercase {
+  text-transform: uppercase !important;
+}
+
+/* Fiyat stilleri */
+.related-products .product-price .price-current {
+  font-weight: bold;
+}
+
+.related-products .product-price .price-discounted {
+  text-decoration: line-through;
+  color: #6c757d;
+}
+
+.related-products .product-price .discount-percent {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+/* Ürün detay sayfası için breadcrumb stil */
+.page-product .breadcrumb-nav .breadcrumb {
+  background-color: transparent;
+  padding: 0;
+  margin: 0;
+}
+
+/* Ürün başlığı stil */
+.page-product h1.fs-4.text-uppercase.fw-bold.mb-0 {
+  font-size: 1.5rem;
+  line-height: 1.3;
+  margin-bottom: 1rem !important;
+}
+
+/* Ürün açıklaması stil */
+.page-product .product-details .mb-5 {
+  margin-bottom: 2rem !important;
+}
+
+/* Renk ve beden başlık stil */
+.page-product .product-details h3.text-uppercase.mb-3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 1rem !important;
+}
+
+/* Ürün açıklaması linkleri stil */
+.page-product .product-details .border-top.pt-4 {
+  border-top: 1px solid #eee !important;
+  padding-top: 1.5rem !important;
+}
+
+/* Ürün açıklaması linkleri stil */
+.page-product .product-details .border-top.pt-4 a.d-block {
+  padding: 0.75rem 0;
+  color: #000;
+  text-decoration: none;
+  border-bottom: none;
+  transition: all 0.3s ease;
+}
+
+.page-product .product-details .border-top.pt-4 a.d-block:hover {
+  color: #000;
+  background-color: transparent;
+  padding-left: 5px;
+}
+
+/* Ürün fiyat stil */
+.page-product .product-details .fs-3.fw-bold {
+  font-size: 1.5rem;
+}
+
+/* Ürün fiyat satırı stil */
+.page-product .product-details .mb-5 div {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* Ürün fiyatı ve indirim oranı hizalama */
+.page-product .product-details .fs-5.text-muted.text-decoration-line-through {
+  font-size: 1rem;
+}
+
+.page-product .product-details .fs-5.text-danger {
+  font-size: 1rem;
+}
+
+/* Renk seçimi stil */
+.page-product .product-details .d-flex.gap-3 {
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* Beden seçimi stil */
+.page-product .product-details .form-select.w-50 {
+  width: 100% !important;
+  max-width: 300px;
+}
+
+/* Sepete ekle butonu stil */
+.page-product .product-details .btn.btn-dark.w-50.py-3 {
+  width: 100% !important;
+  max-width: 300px;
+  margin-bottom: 2rem !important;
+}
+
+/* Favori ikon stil */
+.page-product .product-details .fa-regular.fa-heart.fs-4.hover-text-danger {
+  font-size: 1.5rem !important;
+  transition: all 0.3s ease;
+}
+
+/* Ürün açıklaması offcanvas içeriği stil */
+.page-product .offcanvas-body {
+  padding: 1.5rem;
+}
+
+.page-product .offcanvas-body p {
+  line-height: 1.7;
+  color: #333;
+}
+
+/* Offcanvas başlık stil */
+.page-product .offcanvas-header .offcanvas-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+/* İlgili ürünler başlık stil */
+.related-products h2.text-uppercase.fw-medium.mb-5.fs-5 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* İlgili ürünler carousel stil */
+.related-products .carousel.slide {
+  position: relative;
+}
+
+/* İlgili ürünler carousel item stil */
+.related-products .carousel-item {
+  padding: 0 15px;
+}
+
+/* İlgili ürünler ürün kartı stil */
+.related-products .product-card {
+  border: none;
+  border-radius: 0;
+  overflow: visible;
+}
+
+/* İlgili ürünler ürün resim stil */
+.related-products .ratio.ratio-1x1 {
+  border-radius: 0;
+  overflow: hidden;
+}
+
+/* İlgili ürünler ürün isim stil */
+.related-products .product-name.text-uppercase.mb-1 {
+  font-size: 0.85rem;
+  margin-bottom: 0.25rem !important;
+}
+
+/* İlgili ürünler ürün fiyat stil */
+.related-products .product-price.text-start {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+}
+
+/* İlgili ürünler fiyat stil */
+.related-products .product-price .price-current {
+  font-size: 0.9rem;
+}
+
+.related-products .product-price .price-discounted {
+  font-size: 0.8rem;
+}
+
+.related-products .product-price .discount-percent {
+  font-size: 0.8rem;
+}
+
+/* İlgili ürünler carousel okları stil */
+.related-products .carousel-control-prev,
+.related-products .carousel-control-next {
+  width: 40px;
+  height: 40px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 0;
+  opacity: 1;
+  transition: all 0.3s ease;
+}
+
+.related-products .carousel-control-prev:hover,
+.related-products .carousel-control-next:hover {
+  background: #000;
+  border-color: #000;
+  opacity: 1;
+}
+
+.related-products .carousel-control-prev:hover .carousel-control-prev-icon::before,
+.related-products .carousel-control-next:hover .carousel-control-next-icon::before {
+  color: #fff;
+}
+
+/* Mobil uyumlu stiller */
+@media (max-width: 768px) {
+  .product-main {
+    padding-top: 20px;
+  }
+  
+  .product-gallery {
+    height: 300px;
+  }
+  
+  .gallery-image {
+    min-height: 300px;
+  }
+  
+  .thumbnails {
+    max-height: 300px;
+  }
+  
+  .product-details {
+    padding: 1rem !important;
+  }
+  
+  .page-product h1.fs-4.text-uppercase.fw-bold.mb-0 {
+    font-size: 1.25rem;
+  }
+  
+  .page-product .product-details .fs-3.fw-bold {
+    font-size: 1.25rem;
+  }
+  
+  .related-products h2.text-uppercase.fw-medium.mb-5.fs-5 {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .product-gallery {
+    height: 250px;
+  }
+  
+  .gallery-image {
+    min-height: 250px;
+  }
+  
+  .thumbnails {
+    max-height: 250px;
+  }
+  
+  .page-product .product-details .fs-3.fw-bold {
+    font-size: 1.1rem;
+  }
+  
+  .page-product .product-details .fs-5.text-muted.text-decoration-line-through {
+    font-size: 0.8rem;
+  }
+  
+  .page-product .product-details .fs-5.text-danger {
+    font-size: 0.8rem;
+  }
+}
+
+/* Ürün detay sayfası özel stiller son */
+
+/* ======================
+   OFFCANVAS BACKDROP FIX
+   ====================== */
+
+/* Remove offcanvas backdrop (black overlay) */
+.offcanvas-backdrop {
+  background-color: transparent !important;
+}
+
+/* Alternative approach - if the above doesn't work */
+body.offcanvas-open {
+  position: relative;
+}
+
+/* Ensure content doesn't shift when backdrop appears */
+.offcanvas.show {
+  z-index: 1200;
+}
+
+
