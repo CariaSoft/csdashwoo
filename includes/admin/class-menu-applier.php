@@ -9,32 +9,44 @@ class Menu_Applier {
     public static function apply_custom_menu() {
         global $menu, $submenu;
 
-        $saved = get_option('csdashwoo_menu_layout', []);
-        if (empty($saved)) return;
+        $saved_roles = get_option('csdashwoo_menu_roles', []);
 
-        $new_menu = [];
         $current_user_roles = wp_get_current_user()->roles;
 
-        foreach ($saved as $slug => $data) {
-            $allowed = false;
-            foreach ($data['roles'] as $role) {
-                if (in_array($role, $current_user_roles)) {
-                    $allowed = true;
-                    break;
+        // Ana menü filtrele
+        foreach ($menu as $key => $item) {
+            $slug = $item[2];
+            if (isset($saved_roles[$slug])) {
+                $allowed = false;
+                foreach ($saved_roles[$slug] as $role) {
+                    if (in_array($role, $current_user_roles)) {
+                        $allowed = true;
+                        break;
+                    }
                 }
-            }
-            if (!$allowed) continue;
-
-            // Menü öğesini bul ve ekle
-            foreach ($menu as $item) {
-                if (isset($item[2]) && $item[2] === $slug) {
-                    $new_menu[] = $item;
-                    break;
+                if (!$allowed) {
+                    unset($menu[$key]);
                 }
             }
         }
 
-        // Yeni menü düzenini uygula
-        $menu = $new_menu;
+        // Alt menü filtrele
+        foreach ($submenu as $parent => &$sub) {
+            foreach ($sub as $key => $item) {
+                $slug = $item[2];
+                if (isset($saved_roles[$slug])) {
+                    $allowed = false;
+                    foreach ($saved_roles[$slug] as $role) {
+                        if (in_array($role, $current_user_roles)) {
+                            $allowed = true;
+                            break;
+                        }
+                    }
+                    if (!$allowed) {
+                        unset($sub[$key]);
+                    }
+                }
+            }
+        }
     }
 }

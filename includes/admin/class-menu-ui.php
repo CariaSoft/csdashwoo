@@ -31,4 +31,24 @@ class Menu_UI {
 
         wp_send_json_success('Menü kaydedildi');
     }
+
+    public static function save_menu_callback() {
+        check_ajax_referer('csdashwoo_save_menu', '_ajax_nonce');
+
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error('Yetki yok');
+        }
+
+        // Roller
+        $roles = [];
+        if (isset($_POST['roles'])) {
+            foreach ($_POST['roles'] as $slug => $role_array) {
+                $roles[$slug] = array_map('sanitize_text_field', (array)$role_array);
+            }
+        }
+
+        update_option('csdashwoo_menu_roles', $roles);
+
+        wp_send_json_success('Kaydedildi');
+    }
 }

@@ -9,6 +9,27 @@ if (!defined('ABSPATH')) {
 
 class Dashboard_Widgets {
 
+    public static function enqueue_dashboard_styles($hook) {
+        if (strpos($hook, 'index.php') !== false || strpos($hook, 'dashboard') !== false) {
+            wp_enqueue_style(
+                'csdashwoo-dashboard-widgets',
+                CSDASHWOO_URL . 'assets/css/dashboard-widgets.css',
+                [],
+                '1.2.0'
+            );
+        }
+    }
+
+    public static function add_dashboard_body_class() {
+        $screen = get_current_screen();
+        if ($screen && $screen->id === 'dashboard') {
+            $hide_defaults = get_option('csdashwoo_hide_default_widgets', false);
+            if ($hide_defaults) {
+                echo '<script>jQuery(document).ready(function($) { $("body").addClass("csdashwoo-hide-defaults"); });</script>';
+            }
+        }
+    }
+
     public static function register_widgets() {
         // Varsayılan widget'ları gizle (ayar sayfasındaki checkbox ile)
         if (get_option('csdashwoo_hide_default_widgets', false)) {
@@ -18,6 +39,19 @@ class Dashboard_Widgets {
             unset($wp_meta_boxes['dashboard']['side']['core']);
             unset($wp_meta_boxes['dashboard']['normal']['high']);
             unset($wp_meta_boxes['dashboard']['side']['high']);
+            
+            // WooCommerce ve diğer yaygın dashboard widget'larını kaldır
+            remove_meta_box('woocommerce_dashboard_status', 'dashboard', 'normal');
+            remove_meta_box('dashboard_right_now', 'dashboard', 'normal');
+            remove_meta_box('dashboard_recent_comments', 'dashboard', 'normal');
+            remove_meta_box('dashboard_incoming_links', 'dashboard', 'normal');
+            remove_meta_box('dashboard_plugins', 'dashboard', 'normal');
+            remove_meta_box('dashboard_quick_press', 'dashboard', 'side');
+            remove_meta_box('dashboard_recent_drafts', 'dashboard', 'side');
+            remove_meta_box('dashboard_primary', 'dashboard', 'side');
+            remove_meta_box('dashboard_secondary', 'dashboard', 'side');
+            remove_meta_box('dashboard_activity', 'dashboard', 'normal');
+            remove_meta_box('dashboard_site_health', 'dashboard', 'normal');
         }
 
         // Widget 1: Satış Özeti
@@ -76,26 +110,28 @@ class Dashboard_Widgets {
         }
 
         ?>
-        <div style="padding: 15px; background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-            <h3 style="margin: 0 0 15px; color: #2e7d32; font-size: 1.4em;">📈 Satış Performansı</h3>
-            <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
-                <div>
-                    <strong style="display: block; color: #555;">Bugün</strong>
-                    <span style="font-size: 1.8em; font-weight: bold; color: #2e7d32;"><?php echo wc_price($today_sales); ?></span>
-                </div>
-                <div>
-                    <strong style="display: block; color: #555;">Bu Ay</strong>
-                    <span style="font-size: 1.6em; font-weight: bold; color: #388e3c;"><?php echo wc_price($month_sales); ?></span>
-                </div>
+        <div class="csdashwoo-widget csdashwoo-sales">
+            <div class="csdashwoo-widget-header">
+                <span>📈</span> Satış Performansı
             </div>
-            <p style="margin: 10px 0; color: #555;">
-                <strong>Toplam Tamamlanan Sipariş:</strong> <?php echo number_format_i18n($total_orders); ?>
-            </p>
-            <a href="<?php echo admin_url('edit.php?post_type=shop_order'); ?>" 
-               class="button button-primary" 
-               style="width: 100%; margin-top: 15px; text-align: center; padding: 10px;">
-                Tüm Siparişleri İncele
-            </a>
+            <div class="csdashwoo-widget-content">
+                <div class="csdashwoo-list-item">
+                    <span>Bugün</span>
+                    <span class="csdashwoo-big-number"><?php echo wc_price($today_sales); ?></span>
+                </div>
+                <div class="csdashwoo-list-item">
+                    <span>Bu Ay</span>
+                    <span class="csdashwoo-big-number"><?php echo wc_price($month_sales); ?></span>
+                </div>
+                <div class="csdashwoo-list-item">
+                    <span>Toplam Tamamlanan Sipariş</span>
+                    <span><?php echo number_format_i18n($total_orders); ?></span>
+                </div>
+                <a href="<?php echo admin_url('edit.php?post_type=shop_order'); ?>" 
+                   class="button button-primary csdashwoo-button">
+                    Tüm Siparişleri İncele
+                </a>
+            </div>
         </div>
         <?php
     }
@@ -122,35 +158,32 @@ class Dashboard_Widgets {
         $new_reviews = wp_count_comments(['post_type' => 'product', 'status' => 'hold']);
 
         ?>
-        <div style="padding: 15px; background: linear-gradient(135deg, #fff3e0, #ffe0b2); border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-            <h3 style="margin: 0 0 15px; color: #ef6c00; font-size: 1.4em;">⚠️ Acil İşlemler</h3>
-            <ul style="list-style: none; padding: 0; margin: 0;">
-                <li style="padding: 10px 0; border-bottom: 1px solid #ffb74d;">
-                    <strong>Bekleyen Sipariş</strong>
-                    <span style="float: right; color: #d32f2f; font-weight: bold; font-size: 1.4em;"><?php echo $pending; ?></span>
-                    <div style="clear:both;"></div>
-                </li>
-                <li style="padding: 10px 0; border-bottom: 1px solid #ffb74d;">
-                    <strong>Hazırlanan Sipariş</strong>
-                    <span style="float: right; color: #f57c00; font-weight: bold;"><?php echo $processing; ?></span>
-                    <div style="clear:both;"></div>
-                </li>
-                <li style="padding: 10px 0; border-bottom: 1px solid #ffb74d;">
-                    <strong>Onay Bekleyen Yorum</strong>
-                    <span style="float: right; color: #ff8f00;"><?php echo $new_reviews->total_comments; ?></span>
-                    <div style="clear:both;"></div>
-                </li>
-                <li style="padding: 10px 0;">
-                    <strong>Düşük Stok Ürün</strong>
-                    <span style="float: right; color: #d32f2f; font-weight: bold;"><?php echo $low_stock_count; ?></span>
-                    <div style="clear:both;"></div>
-                </li>
-            </ul>
-            <a href="<?php echo admin_url('edit.php?post_type=shop_order'); ?>" 
-               class="button" 
-               style="width: 100%; margin-top: 15px; text-align: center;">
-                Hepsini Yönet
-            </a>
+        <div class="csdashwoo-widget csdashwoo-pending">
+            <div class="csdashwoo-widget-header">
+                <span>⚠️</span> Acil İşlemler
+            </div>
+            <div class="csdashwoo-widget-content">
+                <div class="csdashwoo-list-item">
+                    <span>Bekleyen Sipariş</span>
+                    <span class="csdashwoo-big-number"><?php echo $pending; ?></span>
+                </div>
+                <div class="csdashwoo-list-item">
+                    <span>Hazırlanan Sipariş</span>
+                    <span class="csdashwoo-big-number"><?php echo $processing; ?></span>
+                </div>
+                <div class="csdashwoo-list-item">
+                    <span>Onay Bekleyen Yorum</span>
+                    <span><?php echo $new_reviews->total_comments; ?></span>
+                </div>
+                <div class="csdashwoo-list-item">
+                    <span>Düşük Stok Ürün</span>
+                    <span class="csdashwoo-big-number"><?php echo $low_stock_count; ?></span>
+                </div>
+                <a href="<?php echo admin_url('edit.php?post_type=shop_order'); ?>" 
+                   class="button csdashwoo-button">
+                    Hepsini Yönet
+                </a>
+            </div>
         </div>
         <?php
     }
@@ -160,19 +193,23 @@ class Dashboard_Widgets {
      */
     public static function render_recent_notifications() {
         ?>
-        <div style="padding: 15px; background: #f3e5f5; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align: center;">
-            <h3 style="margin: 0 0 15px; color: #7b1fa2; font-size: 1.4em;">🔔 Bildirim Merkezi</h3>
-            <p style="font-style: italic; color: #666;">
-                v2.0 ile tam aktif olacak
-            </p>
-            <ul style="text-align: left; margin: 15px 0; padding-left: 20px; color: #555;">
-                <li>Yeni sipariş anında bildirim</li>
-                <li>Sipariş durumu değişiklikleri</li>
-                <li>Onay bekleyen ürün yorumları</li>
-                <li>Contact Form 7 mesajları</li>
-                <li>Seçmeli bildirim kapatma</li>
-            </ul>
-            <p><strong>Yakında burada!</strong></p>
+        <div class="csdashwoo-widget csdashwoo-notifications">
+            <div class="csdashwoo-widget-header">
+                <span>🔔</span> Bildirim Merkezi
+            </div>
+            <div class="csdashwoo-widget-content" style="text-align: center;">
+                <p style="font-style: italic; color: #666;">
+                    v2.0 ile tam aktif olacak
+                </p>
+                <ul style="text-align: left; margin: 15px 0; padding-left: 20px; color: #555;">
+                    <li>Yeni sipariş anında bildirim</li>
+                    <li>Sipariş durumu değişiklikleri</li>
+                    <li>Onay bekleyen ürün yorumları</li>
+                    <li>Contact Form 7 mesajları</li>
+                    <li>Seçmeli bildirim kapatma</li>
+                </ul>
+                <p><strong>Yakında burada!</strong></p>
+            </div>
         </div>
         <?php
     }

@@ -1,0 +1,73 @@
+/* CSDashWoo Dashboard Temiz Stil - 2026 */
+.postbox.csdashwoo-widget {
+    border: none !important;
+    border-radius: 12px !important;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1) !important;
+    overflow: hidden !important;
+    background: white !important;
+}
+
+.postbox .csdashwoo-widget-header {
+    padding: 16px 20px !important;
+    font-size: 1.3em !important;
+    font-weight: 600 !important;
+    background: #f8fafc !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    color: #0f172a !important;
+}
+
+.postbox .csdashwoo-widget-content {
+    padding: 20px !important;
+}
+
+.csdashwoo-sales .csdashwoo-widget-header {
+    background: #ecfdf5 !important;
+    color: #065f46 !important;
+}
+
+.csdashwoo-pending .csdashwoo-widget-header {
+    background: #fffbeb !important;
+    color: #92400e !important;
+}
+
+.csdashwoo-notifications .csdashwoo-widget-header {
+    background: #f3e8ff !important;
+    color: #6d28d9 !important;
+}
+
+.csdashwoo-list-item {
+    display: flex !important;
+    justify-content: space-between !important;
+    padding: 12px 0 !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+    font-size: 1.1em !important;
+}
+
+.csdashwoo-big-number {
+    font-size: 2em !important;
+    font-weight: bold !important;
+}
+
+.postbox .button {
+    width: 100% !important;
+    text-align: center !important;
+    margin-top: 15px !important;
+    padding: 12px !important;
+    border-radius: 8px !important;
+}
+
+/* Varsayılan widget'ları tamamen gizle */
+.csdashwoo-hide-defaults .postbox:not(.csdashwoo-widget) {
+    display: none !important;
+}
+
+/* Dashboard container için stil */
+#wpbody-content .wrap {
+    margin: 0 !important;
+}
+
+/* Kutuları ortalamak için */
+#dashboard-widgets .postbox-container {
+    min-width: 30% !important;
+    flex: 1 !important;
+}

@@ -115,6 +115,15 @@ if (!class_exists('CSDashWoo')) :
 
         private function init_hooks()
         {
+            // Menü yönetimi form işleme
+            if (isset($_POST['nonce']) && isset($_GET['page']) && $_GET['page'] === 'csdashwoo-menu-manager') {
+                if (class_exists('Settings')) {
+                    add_action('admin_init', ['Settings', 'save_menu']);
+                }
+            }
+            
+            // AJAX menü kaydetme
+            add_action('wp_ajax_csdashwoo_save_menu', ['Menu_UI', 'save_menu_callback']);
             // Admin menü ve ayar sayfası
             if (class_exists('Settings')) {
                 add_action('admin_menu', ['Settings', 'add_admin_menu']);
@@ -124,6 +133,8 @@ if (!class_exists('CSDashWoo')) :
             // Dashboard widget'ları
             if (class_exists('Dashboard_Widgets')) {
                 add_action('wp_dashboard_setup', ['Dashboard_Widgets', 'register_widgets']);
+                add_action('admin_enqueue_scripts', ['Dashboard_Widgets', 'enqueue_dashboard_styles']);
+                add_action('admin_head', ['Dashboard_Widgets', 'add_dashboard_body_class']);
             }
 
             // Diğer sınıflar için init (menü düzenlemeleri vs.)

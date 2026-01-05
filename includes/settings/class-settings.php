@@ -16,13 +16,14 @@ class Settings {
         );
 
         // Yeni: Menü Yönetimi sayfası
+        // Menü Yönetimi sayfası
         add_submenu_page(
-            'csdashwoo-settings',                  // Ana menü slug'ı (üst menüde görünür)
-            'Menü Yönetimi',                       // Sayfa başlığı
-            'Menü Yönetimi',                       // Menü adı
-            'manage_options',                      // Yetki (sadece admin)
-            'csdashwoo-menu-manager',              // Slug
-            [self::class, 'menu_manager_page']     // Çağrılacak fonksiyon
+            'csdashwoo-settings',                    // Ana menü slug'ı
+            'Menü Yönetimi - CSDashWoo',
+            'Menü Yönetimi',
+            'manage_options',
+            'csdashwoo-menu-manager',
+            [self::class, 'menu_manager_page']
         );
     }
 
@@ -150,23 +151,106 @@ class Settings {
     }
 
     public static function menu_manager_page() {
+        $menu_items = Menu_Reader::get_current_menu();
+
         ?>
         <div class="wrap">
-            <h1>Menü Yönetimi - CSDashWoo</h1>
-            <p>Menü öğelerini sürükle-bırak ile sıralayın ve hangi rollerin göreceğini seçin.</p>
+            <h1>Menü Yönetimi</h1>
+            <p>Menü öğelerini sürükle bırak ile sıralayın ve hangi rollerin göreceğini seçin.</p>
 
             <form method="post" id="csdashwoo-menu-form">
-                <?php wp_nonce_field('csdashwoo_menu_save', 'csdashwoo_menu_nonce'); ?>
+                <?php wp_nonce_field('csdashwoo_save_menu', 'csdashwoo_nonce'); ?>
 
-                <div id="csdashwoo-menu-list" class="csdashwoo-sortable">
-                    <!-- Buraya dinamik menü öğeleri gelecek (JS + PHP ile doldurulacak) -->
-                </div>
+                <ul id="csdashwoo-menu-sortable" class="sortable-menu">
+                    <?php foreach ($menu_items as $slug => $item): ?>
+                        <li class="menu-item" data-slug="<?php echo esc_attr($slug); ?>">
+                            <span class="dashicons dashicons-menu"></span>
+                            <strong><?php echo esc_html($item['title']); ?></strong>
+
+                            <select name="roles[<?php echo esc_attr($slug); ?>][]" multiple class="menu-roles">
+                                <option value="administrator" <?php selected(in_array('administrator', $item['roles'] ?? [])); ?>>Yönetici</option>
+                                <option value="shop_manager"   <?php selected(in_array('shop_manager',   $item['roles'] ?? [])); ?>>Mağaza Yöneticisi</option>
+                                <option value="editor"         <?php selected(in_array('editor',         $item['roles'] ?? [])); ?>>Editör</option>
+                                <option value="author"         <?php selected(in_array('author',         $item['roles'] ?? [])); ?>>Yazar</option>
+                            </select>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
 
                 <p class="submit">
                     <input type="submit" name="csdashwoo_save_menu" class="button button-primary" value="Menüyü Kaydet">
                 </p>
             </form>
         </div>
+
+        <!-- jQuery UI Sortable için -->
+        <?php wp_enqueue_script('jquery-ui-sortable'); ?>
+        <script>
+        jQuery(function($) {
+            $("#csdashwoo-menu-sortable").sortable({
+                placeholder: "menu-placeholder",
+                handle: ".dashicons-menu"
+            });
+
+            $("#csdashwoo-menu-form").on("submit", function(e) {
+                e.preventDefault();
+
+                var formData = $(this).serialize();
+
+                $.post(ajaxurl, {
+                    action: "csdashwoo_save_menu",
+                    _ajax_nonce: "<?php echo wp_create_nonce('csdashwoo_save_menu'); ?>",
+                    data: formData
+                }, function(response) {
+                    if (response.success) {
+                        alert("Menü başarıyla kaydedildi!");
+                    } else {
+                        alert("Hata: " + (response.data || "Bilinmeyen hata"));
+                    }
+                });
+            });
+        });
+        </script>
+
+        <style>
+        .sortable-menu { list-style: none; padding: 0; }
+        .menu-item {
+            padding: 12px;
+            background: #f9f9f9;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: move;
+        }
+        .menu-item .dashicons { margin-right: 10px; color: #666; }
+        .menu-roles { margin-left: 20px; min-width: 220px; }
+        .menu-placeholder { background: #e0e0e0; height: 50px; border: 2px dashed #aaa; }
+        </style>
         <?php
+    }
+
+    public static function save_menu() {
+        if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'csdashwoo_save_menu')) {
+            return;
+        }
+
+        if (!current_user_can('manage_options')) {
+            return;
+        }
+
+        if (isset($_POST['roles']) && is_array($_POST['roles'])) {
+            $menu_layout = array();
+            foreach ($_POST['roles'] as $slug => $roles) {
+                $menu_layout[$slug] = array(
+                    'roles' => is_array($roles) ? $roles : array()
+                );
+            }
+            update_option('csdashwoo_menu_layout', $menu_layout);
+            
+            // Add success message
+            add_action('admin_notices', function() {
+                echo '<div class="notice notice-success is-dismissible"><p>Menü ayarları başarıyla kaydedildi.</p></div>';
+            });
+        }
     }
 }
