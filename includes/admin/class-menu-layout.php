@@ -1,7 +1,5 @@
 <?php
 
-namespace CariaSoft\CSDashWoo\Admin;
-
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }

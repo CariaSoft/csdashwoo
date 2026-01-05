@@ -1,7 +1,5 @@
 <?php
 
-namespace CariaSoft\CSDashWoo\Admin;
-
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
@@ -126,7 +124,7 @@ class Menu_Applier {
         $menu = $new_menu;
 
         // 4️⃣ Etiketleri uygula
-        if ( class_exists( '\CariaSoft\CSDashWoo\Admin\Menu_Labels' ) ) {
+        if ( class_exists( 'Menu_Labels' ) ) {
             Menu_Labels::apply();
         }
     }

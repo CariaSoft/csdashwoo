@@ -1,7 +1,5 @@
 <?php
 
-namespace CariaSoft\CSDashWoo\Notifications;
-
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
