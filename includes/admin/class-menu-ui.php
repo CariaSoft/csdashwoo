@@ -5,84 +5,30 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 class Menu_UI {
 
     public static function init() {
-        add_action( 'admin_enqueue_scripts', [ __CLASS__, 'assets' ] );
-        add_action( 'admin_menu', [ __CLASS__, 'register_page' ] );
-        add_action( 'wp_ajax_csdashwoo_save_menu', [ __CLASS__, 'save' ] );
+        add_action('admin_enqueue_scripts', [self::class, 'enqueue_assets']);
+        add_action('wp_ajax_csdashwoo_save_menu', [self::class, 'save_menu']);
     }
 
-    public static function register_page() {
-        add_submenu_page(
-            'csdashwoo-settings',
-            'Menü Yöneticisi',
-            'Menü Yöneticisi',
-            'manage_options',
-            'csdashwoo-menu-manager',
-            [ __CLASS__, 'render' ]
-        );
-    }
+    public static function enqueue_assets($hook) {
+        if ($hook !== 'settings_page_csdashwoo-menu-manager') return;
 
-    public static function assets( $hook ) {
-        if ( strpos( $hook, 'csdashwoo-menu-manager' ) === false ) return;
+        wp_enqueue_script('jquery-ui-sortable');
+        wp_enqueue_style('csdashwoo-menu-ui', CSDASHWOO_URL . 'assets/css/menu-ui.css', [], '1.0');
+        wp_enqueue_script('csdashwoo-menu-ui', CSDASHWOO_URL . 'assets/menu-ui.js', ['jquery', 'jquery-ui-sortable'], '1.0', true);
 
-        wp_enqueue_script( 'jquery-ui-sortable' );
-        wp_enqueue_script(
-            'csdashwoo-menu-ui',
-            CSDASHWOO_URL . 'assets/menu-ui.js',
-            [ 'jquery', 'jquery-ui-sortable' ],
-            '1.0',
-            true
-        );
-
-        wp_localize_script( 'csdashwoo-menu-ui', 'csdashwoo', [
-            'ajax' => admin_url( 'admin-ajax.php' ),
-            'nonce' => wp_create_nonce( 'csdashwoo_menu' )
+        wp_localize_script('csdashwoo-menu-ui', 'csdashwooMenu', [
+            'ajaxurl' => admin_url('admin-ajax.php'),
+            'nonce'   => wp_create_nonce('csdashwoo_menu_save'),
+            'menu'    => Menu_Reader::get_admin_menu() // JSON olarak menüyü JS'e geçir
         ]);
     }
 
-    public static function render() {
-        $menus = Menu_Reader::get_menu_tree();
-        $layout = Menu_Layout::get();
-        ?>
-        <div class="wrap">
-            <h1>Menü Yöneticisi</h1>
+    public static function save_menu() {
+        check_ajax_referer('csdashwoo_menu_save', 'nonce');
 
-            <div style="display:flex; gap:30px">
+        $layout = isset($_POST['menu_layout']) ? wp_unslash($_POST['menu_layout']) : [];
+        update_option('csdashwoo_menu_layout', $layout);
 
-                <ul id="active-menu" class="menu-box">
-                    <h3>Menü Görünümü</h3>
-                    <?php foreach ( $layout as $slug ): ?>
-                        <li data-slug="<?= esc_attr($slug) ?>">
-                            <?= esc_html( $menus[$slug]['title'] ?? $slug ) ?>
-                        </li>
-                    <?php endforeach; ?>
-                </ul>
-
-                <ul id="all-menu" class="menu-box">
-                    <h3>WP Menüler</h3>
-                    <?php foreach ( $menus as $slug => $menu ): ?>
-                        <li data-slug="<?= esc_attr($slug) ?>">
-                            <?= esc_html( $menu['title'] ) ?>
-                        </li>
-                    <?php endforeach; ?>
-                </ul>
-
-            </div>
-
-            <button class="button button-primary" id="save-menu">Kaydet</button>
-        </div>
-        <?php
-    }
-
-    public static function save() {
-        check_ajax_referer( 'csdashwoo_menu', 'nonce' );
-
-        if ( ! current_user_can( 'manage_options' ) ) {
-            wp_send_json_error();
-        }
-
-        $layout = isset($_POST['layout']) ? array_map('sanitize_text_field', $_POST['layout']) : [];
-        Menu_Layout::save( $layout );
-
-        wp_send_json_success();
+        wp_send_json_success('Menü kaydedildi');
     }
 }

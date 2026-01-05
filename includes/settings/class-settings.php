@@ -6,12 +6,23 @@ if (!defined('ABSPATH')) {
 class Settings {
 
     public static function add_admin_menu() {
+        // Ana ayarlar sayfası
         add_options_page(
             'CSDashWoo Ayarlari',
             'CSDashWoo',
             'manage_options',
             'csdashwoo-settings',
             [self::class, 'settings_page']
+        );
+
+        // Yeni: Menü Yönetimi sayfası
+        add_submenu_page(
+            'csdashwoo-settings',                  // Ana menü slug'ı (üst menüde görünür)
+            'Menü Yönetimi',                       // Sayfa başlığı
+            'Menü Yönetimi',                       // Menü adı
+            'manage_options',                      // Yetki (sadece admin)
+            'csdashwoo-menu-manager',              // Slug
+            [self::class, 'menu_manager_page']     // Çağrılacak fonksiyon
         );
     }
 
@@ -135,6 +146,27 @@ class Settings {
             <option value="columns" <?php selected('columns', $value); ?>>Sütunlar</option>
             <option value="compact" <?php selected('compact', $value); ?>>Kompakt</option>
         </select>
+        <?php
+    }
+
+    public static function menu_manager_page() {
+        ?>
+        <div class="wrap">
+            <h1>Menü Yönetimi - CSDashWoo</h1>
+            <p>Menü öğelerini sürükle-bırak ile sıralayın ve hangi rollerin göreceğini seçin.</p>
+
+            <form method="post" id="csdashwoo-menu-form">
+                <?php wp_nonce_field('csdashwoo_menu_save', 'csdashwoo_menu_nonce'); ?>
+
+                <div id="csdashwoo-menu-list" class="csdashwoo-sortable">
+                    <!-- Buraya dinamik menü öğeleri gelecek (JS + PHP ile doldurulacak) -->
+                </div>
+
+                <p class="submit">
+                    <input type="submit" name="csdashwoo_save_menu" class="button button-primary" value="Menüyü Kaydet">
+                </p>
+            </form>
+        </div>
         <?php
     }
 }

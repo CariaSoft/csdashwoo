@@ -133,6 +133,11 @@ if (!class_exists('CSDashWoo')) :
             if (class_exists('Notification_Center')) {
                 Notification_Center::init();
             }
+            
+            // Menü uygulama
+            if (class_exists('Menu_Applier')) {
+                Menu_Applier::init();
+            }
         }
 
         // Önleme: clone ve unserialize

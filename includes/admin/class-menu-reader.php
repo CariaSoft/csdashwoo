@@ -1,44 +1,61 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-    exit;
-}
-
 class Menu_Reader {
 
-    public static function get_menu_tree() {
+    public static function get_admin_menu() {
         global $menu, $submenu;
-        
-        $menu_tree = [];
-        
-        foreach ( $menu as $item ) {
-            if ( ! empty( $item[2] ) ) {
-                $menu_tree[ $item[2] ] = [
-                    'title' => $item[0],
-                    'capability' => $item[1] ?? 'read',
-                    'slug' => $item[2],
-                    'has_submenu' => isset( $submenu[ $item[2] ] ) && ! empty( $submenu[ $item[2] ] )
-                ];
-            }
-        }
-        
-        // Add submenu items if they're not already in the main menu
-        foreach ( $submenu as $parent_slug => $sub_items ) {
-            foreach ( $sub_items as $sub_item ) {
-                $sub_slug = $sub_item[2];
-                
-                // Skip if this slug already exists in the main menu
-                if ( ! isset( $menu_tree[ $sub_slug ] ) ) {
-                    $menu_tree[ $sub_slug ] = [
-                        'title' => $sub_item[0],
-                        'capability' => $sub_item[1] ?? 'read',
-                        'slug' => $sub_slug,
-                        'parent' => $parent_slug
+
+        $structured_menu = [];
+
+        foreach ($menu as $priority => $item) {
+            if (empty($item[0])) continue; // Boş satırlar
+
+            $slug = $item[2];
+            $title = strip_tags($item[0]);
+            $roles = self::get_default_roles_for_menu($slug);
+
+            $structured_menu[$slug] = [
+                'title'  => $title,
+                'slug'   => $slug,
+                'roles'  => $roles,
+                'icon'   => $item[6] ?? 'dashicons-admin-generic',
+                'submenu' => []
+            ];
+
+            // Alt menüler
+            if (isset($submenu[$slug])) {
+                foreach ($submenu[$slug] as $sub) {
+                    $sub_slug = $sub[2];
+                    $structured_menu[$slug]['submenu'][$sub_slug] = [
+                        'title' => strip_tags($sub[0]),
+                        'slug'  => $sub_slug,
+                        'roles' => self::get_default_roles_for_menu($sub_slug)
                     ];
                 }
             }
         }
-        
-        return $menu_tree;
+
+        // Kayıtlı özel sıralama varsa uygula
+        $saved_layout = get_option('csdashwoo_menu_layout', []);
+        if (!empty($saved_layout)) {
+            // Sıralamayı uygula (basitçe)
+            $ordered = [];
+            foreach ($saved_layout as $key => $data) {
+                if (isset($structured_menu[$key])) {
+                    $ordered[$key] = $structured_menu[$key];
+                }
+            }
+            $structured_menu = $ordered + $structured_menu;
+        }
+
+        return $structured_menu;
+    }
+
+    private static function get_default_roles_for_menu($slug) {
+        // Basit varsayılanlar (gerçekte daha detaylı olabilir)
+        if (strpos($slug, 'edit.php?post_type=shop_order') !== false) {
+            return ['administrator', 'shop_manager'];
+        }
+        return ['administrator'];
     }
 }

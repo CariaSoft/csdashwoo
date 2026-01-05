@@ -1,0 +1,41 @@
+.csdashwoo-sortable {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+    min-height: 100px;
+}
+
+.menu-item {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin: 5px 0;
+    cursor: move;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+}
+
+.menu-item:hover {
+    background: #f0f0f0;
+}
+
+.menu-title {
+    font-weight: bold;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #eee;
+}
+
+.menu-roles {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ddd;
+}
+
+.menu-placeholder {
+    height: 50px;
+    background: #f0f0f0;
+    border: 2px dashed #ccc;
+    margin: 5px 0;
+    border-radius: 4px;
+}

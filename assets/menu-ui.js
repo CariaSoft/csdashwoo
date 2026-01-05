@@ -1,25 +1,54 @@
-jQuery(function ($) {
+jQuery(document).ready(function($) {
+    const menu = csdashwooMenu.menu;
 
-    $("#active-menu, #all-menu").sortable({
-        connectWith: ".menu-box",
-        placeholder: "menu-placeholder"
-    }).disableSelection();
+    const $list = $('#csdashwoo-menu-list');
 
-    $("#save-menu").on("click", function () {
-        let layout = [];
-
-        $("#active-menu li").each(function () {
-            layout.push($(this).data("slug"));
+    // Menüyü render et
+    function renderMenu() {
+        $list.empty();
+        Object.keys(menu).forEach(key => {
+            const item = menu[key];
+            const $li = $(`
+                <li data-slug="${key}" class="menu-item">
+                    <div class="menu-title">${item.title}</div>
+                    <select class="menu-roles" multiple>
+                        <option value="administrator" ${item.roles.includes('administrator') ? 'selected' : ''}>Yönetici</option>
+                        <option value="shop_manager" ${item.roles.includes('shop_manager') ? 'selected' : ''}>Mağaza Yöneticisi</option>
+                        <option value="editor" ${item.roles.includes('editor') ? 'selected' : ''}>Editör</option>
+                    </select>
+                </li>
+            `);
+            $list.append($li);
         });
+    }
 
-        $.post(csdashwoo.ajax, {
-            action: "csdashwoo_save_menu",
-            nonce: csdashwoo.nonce,
-            layout: layout
-        }, function () {
-            alert("Menü kaydedildi");
-            location.reload();
-        });
+    renderMenu();
+
+    // Drag & drop
+    $list.sortable({
+        placeholder: "menu-placeholder",
+        update: function() {
+            // Sıralama değiştiğinde kaydedilebilir hale getir
+        }
     });
 
+    // Kaydet butonu
+    $('#csdashwoo-menu-form').on('submit', function(e) {
+        e.preventDefault();
+
+        const newLayout = {};
+        $list.find('li').each(function() {
+            const slug = $(this).data('slug');
+            const roles = $(this).find('.menu-roles').val() || [];
+            newLayout[slug] = { roles };
+        });
+
+        $.post(csdashwooMenu.ajaxurl, {
+            action: 'csdashwoo_save_menu',
+            nonce: csdashwooMenu.nonce,
+            menu_layout: newLayout
+        }, function(response) {
+            alert(response.data);
+        });
+    });
 });
