@@ -144,3 +144,12 @@ if (!class_exists('CSDashWoo')) :
     CSDashWoo::instance();
 
 endif;
+
+// Eklenti action linkleri - güvenli versiyon
+add_filter('plugin_action_links_csdashwoo/csdashwoo.php', 'csdashwoo_add_settings_link');
+
+function csdashwoo_add_settings_link($actions) {
+    $settings_link = '<a href="' . admin_url('options-general.php?page=csdashwoo-settings') . '" style="font-weight: 600; color: #2271b1;">Ayarlar</a>';
+    array_unshift($actions, $settings_link);
+    return $actions;
+}
